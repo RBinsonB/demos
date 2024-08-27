@@ -34,7 +34,7 @@ class MoveWheel(Node):
 
     def set_wheel_common_speed(self, vel):
         target_vel = Float64MultiArray()
-        target_vel.data = [vel, vel*1.5, vel, -vel, -vel*1.5, -vel]
+        target_vel.data = [vel, vel, -vel, -vel]
 
         self.wheel_publisher_.publish(target_vel)
 
@@ -60,7 +60,7 @@ class MoveWheel(Node):
             R = abs(turn_rad)  # Turning radius
 
             L = 0.870  # Chassis Length
-            T = 0.870  # Chassis Width
+            T = 1.050  # Chassis Width
 
             alpha_i = math.atan(L/(R - (T/2)))
             alpha_o = math.atan(L/(R + (T/2)))

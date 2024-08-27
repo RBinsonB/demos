@@ -98,7 +98,7 @@ def generate_launch_description():
         arguments=[
             '-name', 'lunar_pole_exploration_rover',
             '-topic', robot_description,
-            '-z', '-7.5'
+            '-z', '0.5'
         ],
         output='screen'
 
@@ -110,10 +110,10 @@ def generate_launch_description():
 
     ## a hack to resolve current bug
     set_hardware_interface_active = ExecuteProcess(
-        cmd=['ros2', 'service', 'call', 
-            'controller_manager/set_hardware_component_state',
-            'controller_manager_msgs/srv/SetHardwareComponentState',
-            component_state_msg]
+        cmd=['ros2', 'service', 'call',
+             'controller_manager/set_hardware_component_state',
+             'controller_manager_msgs/srv/SetHardwareComponentState',
+             component_state_msg]
     )
 
     load_joint_state_broadcaster = ExecuteProcess(
