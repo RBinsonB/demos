@@ -13,6 +13,7 @@ class MoveWheel(Node):
 
     def __init__(self):
         super().__init__('wheel_node')
+        self.wheel_radius = 0.225
         self.wheel_publisher_ = self.create_publisher(Float64MultiArray, '/wheel_velocity_controller/commands', 10)
         self.steer_publisher_ = self.create_publisher(JointTrajectory, '/steer_position_controller/joint_trajectory', 10)
         timer_period = 0.1  # seconds
@@ -33,8 +34,13 @@ class MoveWheel(Node):
         self.curr_vel = msg
 
     def set_wheel_common_speed(self, vel):
+        wheel_angular_vel = vel / self.wheel_radius
         target_vel = Float64MultiArray()
-        target_vel.data = [vel, vel, -vel, -vel]
+        target_vel.data = [
+            wheel_angular_vel,
+            wheel_angular_vel,
+            wheel_angular_vel,
+            wheel_angular_vel]
 
         self.wheel_publisher_.publish(target_vel)
 
@@ -42,8 +48,8 @@ class MoveWheel(Node):
         if abs(angular_speed) < 1e-3:
             return 0.0
 
-        # max 0.6 min -0.6
-        angular_speed = min(0.6, max(angular_speed, -0.6))
+        # max 0.7 min -0.7
+        angular_speed = min(0.7, max(angular_speed, -0.7))
         return (angular_speed/abs(angular_speed))*(-25 * abs(angular_speed) + 17.5)
 
     def set_steering(self, turn_rad):
@@ -65,11 +71,11 @@ class MoveWheel(Node):
             alpha_i = math.atan(L/(R - (T/2)))
             alpha_o = math.atan(L/(R + (T/2)))
 
-            if alpha_i > 0.6:
-                alpha_i = 0.6
+            if alpha_i > 0.7:
+                alpha_i = 0.7
 
-            if alpha_o > 0.6:
-                alpha_o = 0.6
+            if alpha_o > 0.7:
+                alpha_o = 0.7
 
             alpha_i = round(alpha_i, 2)
             alpha_o = round(alpha_o, 2)

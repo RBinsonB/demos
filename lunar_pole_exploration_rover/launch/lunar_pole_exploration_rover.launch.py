@@ -80,17 +80,22 @@ def generate_launch_description():
             arguments=[
                 '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
                 '/model/lunar_pole_exploration_rover/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
-                '/scan@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
                 '/model/lunar_pole_exploration_rover/left_solar_panel/solar_panel_output@std_msgs/msg/Float32@ignition.msgs.Float',
                 '/model/lunar_pole_exploration_rover/right_solar_panel/solar_panel_output@std_msgs/msg/Float32@ignition.msgs.Float',
                 '/model/lunar_pole_exploration_rover/rear_solar_panel/solar_panel_output@std_msgs/msg/Float32@ignition.msgs.Float',
             ],
             output='screen')
-   
+
     image_bridge = Node(
             package='ros_gz_image',
             executable='image_bridge',
-            arguments=['/image_raw', '/image_raw'],
+            arguments=['navcam_left/image_raw', 'navcam_left/image_raw'],
+            output='screen')
+     
+    image_bridge = Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['navcam_right/image_raw', 'navcam_right/image_raw'],
             output='screen')
 
     spawn = Node(
@@ -139,6 +144,7 @@ def generate_launch_description():
              'steer_position_controller'],
         output='screen'
     )
+
 
     return LaunchDescription([
         SetParameter(name='use_sim_time', value=True),
