@@ -10,6 +10,7 @@
         </ignition-gui>
         <engine>ogre2</engine>
         <scene>scene</scene>
+        <grid>false</grid>
         <background_color>0.0 0.0 0.0</background_color>
         <camera_pose>-5.0 5.0 2.0 0.0 -0.2 -0.78</camera_pose>
       </plugin>
@@ -34,13 +35,10 @@
                 name="ignition::gazebo::systems::Sensors">
         <render_engine>ogre2</render_engine>
         </plugin>
-        <!-- <plugin entity_name="*"
+        <plugin entity_name="*"
                 entity_type="world"
                 filename="ignition-gazebo-imu-system"
                 name="ignition::gazebo::systems::Imu">
-        </plugin> -->
-        <plugin filename="libignition-gazebo-imu-system.so"
-            name="ignition::gazebo::systems::Imu">
         </plugin>
     </plugins>
     </server_config>
@@ -50,16 +48,17 @@
 
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>-100 100 100 0 0 0</pose>
+      <pose>-2000 2000 100 0 0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
+      <intensity>1.5</intensity>
       <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
+        <range>100000000</range>
+        <constant>1.0</constant>
+        <linear>0.0</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <direction>0.9 -0.9 -0.9</direction>
+      <direction>0.9 -0.9 -0.2</direction>
     </light>
 
     <!-- Lunar Gravity-->
@@ -72,11 +71,10 @@
       <temperature_gradient>0.0</temperature_gradient>
     </atmosphere>
 
-
     <include>
-      <uri>
-        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ground Plane
-      </uri>
+      <uri>model://moon_mons_mouton</uri>
+      <name>moon_mons_mouton</name>
+      <pose>-240 260 -41.5 0 0 0</pose>
     </include>
 
   </world>
