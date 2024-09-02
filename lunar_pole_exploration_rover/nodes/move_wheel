@@ -98,7 +98,7 @@ class MoveWheel(Node):
                     wheel_lin_vel,
                     wheel_lin_vel]
 
-    def normalize(angle):
+    def normalize(self, angle):
         return math.atan2(math.sin(angle), math.cos(angle))
 
     def set_rotate_on_place(self, angular_vel):
@@ -123,7 +123,9 @@ class MoveWheel(Node):
         vel_norm = math.sqrt(linear_vel_x**2 + linear_vel_y**2)
         common_steer_angle = math.atan2(linear_vel_y, linear_vel_x)
 
-        if abs(common_steer_angle) > math.pi:
+        print(f"COMMON STEER IS {common_steer_angle}")
+
+        if abs(common_steer_angle) > (math.pi / 2):
             common_steer_angle = self.normalize(common_steer_angle - math.pi)
             vel_norm = - vel_norm
 
