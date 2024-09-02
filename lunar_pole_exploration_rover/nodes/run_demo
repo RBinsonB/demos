@@ -13,13 +13,50 @@ class RunDemo(Node):
     def __init__(self) -> None:
         super().__init__('run_node')
         self.motion_publisher_ = self.create_publisher(Twist, '/cmd_vel', 10)
-        self.forward_srv = self.create_service(Empty, 'move_forward', self.move_forward_callback)
-        self.stop_srv = self.create_service(Empty, 'move_stop', self.move_stop_callback)
-        self.left_srv = self.create_service(Empty, 'turn_left', self.turn_left_callback)
-        self.right_srv = self.create_service(Empty, 'turn_right', self.turn_right_callback)
+
+        self.forward_srv = self.create_service(
+            Empty,
+            'move_forward',
+            self.move_forward_callback)
+
+        self.stop_srv = self.create_service(
+            Empty,
+            'move_stop',
+            self.move_stop_callback)
+
+        self.left_srv = self.create_service(
+            Empty,
+            'turn_left',
+            self.turn_left_callback)
+
+        self.right_srv = self.create_service(
+            Empty,
+            'turn_right',
+            self.turn_right_callback)
+
+        self.sideway_left_srv = self.create_service(
+            Empty,
+            'move_sideway_left',
+            self.move_sideway_left_callback)
+
+        self.sideway_right_srv = self.create_service(
+            Empty,
+            'move_sideway_right',
+            self.move_sideway_right_callback)
+
+        self.rotate_on_place_srv = self.create_service(
+            Empty,
+            'rotate_on_place',
+            self.rotate_on_place_callback)
+        
+        self.move_sideway_and_turn_left_srv = self.create_service(
+            Empty,
+            'move_sideway_and_turn_left',
+            self.move_sideway_and_turn_left_callback)
+
         self.stopped = True
 
-        timer_period = 0.1
+        timer_period = 0.08
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
         self.curr_action = Twist()
@@ -56,10 +93,45 @@ class RunDemo(Node):
 
     def turn_right_callback(self, request, response):
         self.get_logger().info("Turning right")
-        self.stopped = False
         action = Twist()
         action.linear.x = 1.0
         action.angular.z = -0.4
+        self.curr_action = action
+        self.stopped = False
+        return response
+
+    def move_sideway_left_callback(self, request, response):
+        self.get_logger().info("Moving sideway left")
+        action = Twist()
+        action.linear.x = 0.1
+        action.linear.y = 0.8
+        self.curr_action = action
+        self.stopped = False
+        return response
+
+    def move_sideway_right_callback(self, request, response):
+        self.get_logger().info("Moving sideway right")
+        action = Twist()
+        action.linear.x = 0.1
+        action.linear.y = -0.8
+        self.curr_action = action
+        self.stopped = False
+        return response
+
+    def rotate_on_place_callback(self, request, response):
+        self.get_logger().info("Rotating on place")
+        action = Twist()
+        action.angular.z = 0.8
+        self.curr_action = action
+        self.stopped = False
+        return response
+    
+    def move_sideway_and_turn_left_callback(self, request, response):
+        self.get_logger().info("Moving sideway and turning left ")
+        action = Twist()
+        action.linear.x = 0.1
+        action.linear.y = 0.8
+        action.angular.z = 0.8
         self.curr_action = action
         self.stopped = False
         return response
