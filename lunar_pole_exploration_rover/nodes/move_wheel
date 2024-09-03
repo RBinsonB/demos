@@ -123,8 +123,6 @@ class MoveWheel(Node):
         vel_norm = math.sqrt(linear_vel_x**2 + linear_vel_y**2)
         common_steer_angle = math.atan2(linear_vel_y, linear_vel_x)
 
-        print(f"COMMON STEER IS {common_steer_angle}")
-
         if abs(common_steer_angle) > (math.pi / 2):
             common_steer_angle = self.normalize(common_steer_angle - math.pi)
             vel_norm = - vel_norm
@@ -168,7 +166,8 @@ class MoveWheel(Node):
             # Adjust wheel velocity according to distance to rotation center
             dist_rot_center_to_wheel = math.sqrt(
                 rot_center_to_wheel[0]**2 + rot_center_to_wheel[1]**2)
-            wheel_velocities[i] = angular_vel * dist_rot_center_to_wheel
+            wheel_velocities[i] = math.copysign(
+                angular_vel * dist_rot_center_to_wheel, lin_vel)
 
         return wheel_steer_angles, wheel_velocities
 
