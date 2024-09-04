@@ -44,7 +44,7 @@ xhost +local:docker
 
 Run the container by typing:
 ```bash
-docker run -it lunar_rover_image
+docker run --rm -it --name lunar_pole_exploration_rover --network host -e DISPLAY -e TERM -e QT_X11_NO_MITSHM=1 lunar_rover_image
 ```
 
 Once the container is running, launch the demo by typing the following command:
