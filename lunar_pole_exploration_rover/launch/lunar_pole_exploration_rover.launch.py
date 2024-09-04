@@ -103,7 +103,7 @@ def generate_launch_description():
         arguments=[
             '-name', 'lunar_pole_exploration_rover',
             '-topic', robot_description,
-            '-z', '0.5'
+            '-z', '0.0'
         ],
         output='screen'
 
