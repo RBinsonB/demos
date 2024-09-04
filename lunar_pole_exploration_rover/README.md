@@ -63,3 +63,20 @@ TODO
 ## Contribution details
 TODO
 
+### Lunar Pole Exploration Rover
+
+#### Sensor suit
+#### Power system
+#### Control node
+##### Motion types
+
+### Mons Mouton World
+
+### Power System Plugins
+#### SolarPanelPlugin
+#### RtgPlugin
+#### RechargeableBatteryPlugin
+#### SensorPowerSystemPlugin
+
+
+
