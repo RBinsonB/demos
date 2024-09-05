@@ -171,12 +171,13 @@ TODO RBinson insert image
 The rover is powered by a battery. The battery is charged by three solar panels: one on the left, one on the right and on at the back of the rover. The panels are tilted sideways to face the sun which is low on the horizon when close to the moon south pole. Total power of the solar panel is 450W (TODO RBinsonB insert ref) and therefor each panel was estimated to produce 150W at full capacity (sun hitting horizontally). The solar panels are simulated using a specifically developed plugin, detailed later in the document.
 
 #### Sensor suit
-TODO @RBinsonb add more details and ref
-It features a similar sensor suit of the real VIPER rover:
-- A pair of monochrome cameras for navigation, NavCam, mounted on the rover mast
-- A pair of monochrome cameras for the aft blind spots, AftCam, facing back
-- An IMU
-- Odometry plugin
+It features a similar sensor suit of the real VIPER rover. Detailed characteristics were obtained from [359199649_VIPER_Visible_Imaging_System](https://www.researchgate.net/publication/359199649_VIPER_Visible_Imaging_System) and [20210015009 - Colaprete-VIPER PIP final.pdf](https://ntrs.nasa.gov/api/citations/20210015009/downloads/20210015009%20-%20Colaprete-VIPER%20PIP%20final.pdf) and [viper-moon-rover-head-neck-mast-installed](https://www.space.com/viper-moon-rover-head-neck-mast-installed).
+- A pair of monochrome cameras for navigation, NavCam, mounted on the rover mast. Each camera has 70° x 70° FOV and the image sensors have 2048 ×
+2048 pixels. The camera can pan 360° and tilt vertically in both directions at a maximum angle of 75°.
+- A pair of monochrome cameras for the aft blind spots, AftCam, facing back. Each camera has 110° x 110° FOV and the image sensors have 2048 ×
+2048 pixels.
+- An IMU.
+- An Odometry plugin to simulate wheel encoders.
 
 #### Power system
 #### Control node
