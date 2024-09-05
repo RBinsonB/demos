@@ -115,7 +115,23 @@ Turn right
 ros2 service call /turn_right std_srvs/srv/Empty
 ```
 
+Rotate in place
 
+```bash
+ros2 service call /turn_right std_srvs/srv/Empty
+```
+
+Rotate the camera 
+
+```bash
+ros2 service call /camera_rotate std_srvs/srv/Empty
+```
+
+Center the camera (TODO) camera center does not work
+
+```bash
+ros2 service call /camera_center std_srvs/srv/Empty
+```
 
 ### Solar panel and power
 TODO
