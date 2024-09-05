@@ -162,7 +162,9 @@ The rover is powered by a battery. The battery is charged by three solar panels:
 #### SolarPanelPlugin
 #### RtgPlugin
 #### RechargeableBatteryPlugin
+TODO @stevedanolodomor
 #### SensorPowerSystemPlugin
+TODO @stevedanolodomor
 
 
 
