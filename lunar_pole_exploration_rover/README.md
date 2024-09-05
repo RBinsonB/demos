@@ -160,9 +160,50 @@ TODO RBinson insert image
 The rover is powered by a battery. The battery is charged by three solar panels: one on the left, one on the right and on at the back of the rover. The panels are tilted sideways to face the sun which is low on the horizon when close to the moon south pole. Total power of the solar panel is 450W (TODO RBinsonB insert ref) and therefor each panel was estimated to produce 150W at full capacity (sun hitting horizontally). The solar panels are simulated using a specifically developed plugin, detailed later in the document.
 
 #### Sensor suit
+TODO @RBinsonb add more details and ref
+It features a similar sensor suit of the real VIPER rover:
+- A pair of monochrome cameras for navigation, NavCam, mounted on the rover mast
+- A pair of monochrome cameras for the aft blind spots, AftCam, facing back
+- An IMU
+- Odometry plugin
+
 #### Power system
 #### Control node
 ##### Motion types
+
+#### Rover model API
+##### Subscribed Topics
+@RBinsonB TODO
+##### Published Topics
+* **/model/lunar_pole_exploration_rover/left_solar_panel/solar_panel_output** (`ignition_msgs::msg::Float32`) -- Publishes the current output of the left solar panel in watt
+* **/model/lunar_pole_exploration_rover/right_solar_panel/solar_panel_output** (`ignition_msgs::msg::Float32`) -- Publishes the current output of the right solar panel in watt
+* **/model/lunar_pole_exploration_rover/rear_solar_panel/solar_panel_output** (`ignition_msgs::msg::Float32`) -- Publishes the current output of the rear solar panel in watt
+* **/model/lunar_pole_exploration_rover/odometry** (`ignition_msgs::msg::Odometry`) -- Robot odometry
+* **/model/lunar_pole_exploration_rover/odometry_with_covariance**(`ignition_msgs::msg::OdometryWithCovariance`) -- Robot odometry
+* **/model/lunar_pole_exploration_rover/pose**(`ignition_msgs::msg::Pose`) -- Robot estimated pose from odometry
+* **aft_cam_left/camera_info** (`ignition_msgs::msg::CameraInfo`) -- AftCam left camera info
+* **aft_cam_right/camera_info** (`ignition_msgs::msg::CameraInfo`) -- AftCam right camera info
+* **nav_cam_left/camera_info** (`ignition_msgs::msg::CameraInfo`) -- NavCam left camera info
+* **nav_cam_right/camera_info** (`ignition_msgs::msg::CameraInfo`) -- NavCam right camera info
+* **aft_cam_left/image_raw** (`ignition_msgs::msg::Image`) -- AftCam left camera image
+* **aft_cam_right/image_raw** (`ignition_msgs::msg::Image`) -- AftCam right camera image
+* **nav_cam_left/image_raw** (`ignition_msgs::msg::Image`) -- NavCam left camera image
+* **nav_cam_right/image_raw** (`ignition_msgs::msg::Image`) -- NavCam right camera image
+
+##### Services
+@RBinsonB TODO
+
+##### Controllable Joint Interfaces
+* mast_head_pivot_joint (`revolute`) -- NavCam pan joint
+* mast_camera_joint (`revolute`) -- NavCam tilt joint
+* front_left_wheel_joint (`revolute`) -- front left wheel rotation joint
+* rear_left_wheel_joint (`revolute`) -- rear left wheel rotation joint
+* front_right_wheel_joint (`revolute`) -- front right wheel rotation joint
+* rear_right_wheel_joint (`revolute`) -- rear right wheel rotation joint
+* front_left_wheel_axle_joint (`revolute`) -- front left wheel steer joint
+* rear_left_wheel_axle_joint (`revolute`) -- rear left wheel steer joint
+* front_right_wheel_axle_joint (`revolute`) -- front right wheel steer joint
+* rear_right_wheel_axle_joint (`revolute`) -- rear right wheel steer joint
 
 ### Mons Mouton World
 
