@@ -44,7 +44,28 @@ xhost +local:docker
 
 Run the container by typing:
 ```bash
-docker run --rm -it --name lunar_pole_exploration_rover --network host -e DISPLAY -e TERM -e QT_X11_NO_MITSHM=1 lunar_rover_image
+docker run --rm -it --name lunar_pole_exploration_rover \
+--network host \
+-e DISPLAY \
+-e TERM \
+-e QT_X11_NO_MITSHM=1 \
+lunar_rover_image
+```
+
+If you have gpu
+```bash
+docker run --rm -it --name lunar_pole_exploration_rover \
+--network host \
+--privileged \
+--gpus all \
+-e NVIDIA_VISIBLE_DEVICES=all \
+-e NVIDIA_DRIVER_CAPABILITIES=graphics \
+-e DISPLAY=$DISPLAY \
+-e TERM \
+-e QT_X11_NO_MITSHM=1 \
+-e XAUTHORITY=$XAUTHORITY \
+--mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix \
+lunar_rover_image
 ```
 
 Once the container is running, launch the demo by typing the following command:
