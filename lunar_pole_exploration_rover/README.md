@@ -141,6 +141,15 @@ TODO
 TODO
 
 ### Lunar Pole Exploration Rover
+The rover gazebo model is designed to be as close as posible to the real NASA VIPER rover.
+
+It has four steerable wheels that allow a wide range of motion, including going sideways (it would even be holonomic if it wasn't for the limits on the wheel steer angles). TODO INSERT REF (@RBinsonB)
+
+The rover is equipped with a main navigation camera (actually a pair) mounted on a mast. The camera is able to pan and tilt.
+
+TODO RBinson insert image
+
+The rover is powered by a battery. The battery is charged by three solar panels: one on the left, one on the right and on at the back of the rover. The panels are tilted sideways to face the sun which is low on the horizon when close to the moon south pole. Total power of the solar panel is 450W (TODO RBinsonB insert ref) and therefor each panel was estimated to produce 150W at full capacity (sun hitting horizontally). The solar panels are simulated using a specifically developed plugin, detailed later in the document.
 
 #### Sensor suit
 #### Power system
