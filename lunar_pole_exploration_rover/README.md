@@ -6,7 +6,7 @@ It includes a realistic environment, the Mons Mouton, where the VIPER rover was 
 
 The key elements of the simulation is the integration of specifically developped Gazebo plugins. A solar panel plugin and associated battery and power consumption plugins aim to simulate the power generation challenge of the lunar south pole.
 
-This package and associated plugins and models were developped by Robin Baran and Stevedan Ogochukwu Omodolor for the NASA Space ROS Sim Summer Sprint Challenge.
+This package and associated plugins and models were developped by Robin Baran(@RBinsonB) and Stevedan Ogochukwu Omodolor Omodia(@stevedanomodolor) for the NASA Space ROS Sim Summer Sprint Challenge.
 
     Challenge Name: NASA Space ROS Sim Summer Sprint Challenge
     Team lead Freelancer name: @RBinsonB
