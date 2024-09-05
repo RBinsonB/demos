@@ -138,7 +138,15 @@ TODO
 
 
 ## Contribution details
-TODO
+Our contribution is as follows:
+* A lunar south pole exploration Gazebo simulation modelled on NASA VIPER mission including:
+  * A fully simulated rover model
+  * A world and ground model to simulate the Mons Mouton (also called Liebnitz Beta) area.
+* A set of Gazebo plugins to simulate power generation and consumption in space Robotics, used in the lunar pole exploration Gazebo simulation. These plugins are as follows:
+  * A solar panel plugin to simulate power generation from the sun according to occlusion and angle between the sun and the panel
+  * A radioisotope thermal generator plugin to simulate the constant power from a radioisotope thermal generator
+  * A modified version of the linear battery plugin that is able to take as charge input the power outputs of the two previous plugins.
+  * A sensor power load system plugin to simulate the power drawn by sensors
 
 ### Lunar Pole Exploration Rover
 The rover gazebo model is designed to be as close as posible to the real NASA VIPER rover.
