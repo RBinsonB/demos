@@ -220,7 +220,8 @@ It features a similar sensor suit of the real VIPER rover:
 ### Mons Mouton World
 A world and associated Gazebo terrain model for the Mons Mouton mountain located near the lunar south pole (also formaly refered to as Liebnitz Beta).
 
-TODO RBinsonb add image of world
+![Mons Mouton World Screenshot](assets/ressources/images/mons_mouton_world1.png)
+![Mons Mouton World Screenshot](assets/ressources/images/mons_mouton_world2.png)
 
 The differentiating characteristics of the Gazebo world are as follows:
 * Gravity being set to lunar gravity (`<gravity>0 0 -1.62</gravity>`)
