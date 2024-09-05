@@ -127,7 +127,7 @@ Rotate the camera
 ros2 service call /camera_rotate std_srvs/srv/Empty
 ```
 
-Center the camera (TODO) camera center does not work
+Center the camera
 
 ```bash
 ros2 service call /camera_center std_srvs/srv/Empty
