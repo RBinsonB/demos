@@ -83,19 +83,56 @@ def generate_launch_description():
                 '/model/lunar_pole_exploration_rover/left_solar_panel/solar_panel_output@std_msgs/msg/Float32@ignition.msgs.Float',
                 '/model/lunar_pole_exploration_rover/right_solar_panel/solar_panel_output@std_msgs/msg/Float32@ignition.msgs.Float',
                 '/model/lunar_pole_exploration_rover/rear_solar_panel/solar_panel_output@std_msgs/msg/Float32@ignition.msgs.Float',
+                '/model/lunar_pole_exploration_rover/battery/rechargeable_battery/state@sensor_msgs/msg/BatteryState@ignition.msgs.BatteryState',
             ],
             output='screen')
 
-    image_bridge = Node(
+    navcam_left_image_bridge = Node(
             package='ros_gz_image',
             executable='image_bridge',
             arguments=['navcam_left/image_raw', 'navcam_left/image_raw'],
             output='screen')
-     
-    image_bridge = Node(
+
+    navcam_right_image_bridge = Node(
             package='ros_gz_image',
             executable='image_bridge',
             arguments=['navcam_right/image_raw', 'navcam_right/image_raw'],
+            output='screen')
+
+    aftcam_left_image_bridge = Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['aftcam_left/image_raw', 'aftcam_left/image_raw'],
+            output='screen')
+
+    aftcam_right_image_bridge = Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['aftcam_right/image_raw', 'aftcam_right/image_raw'],
+            output='screen')
+
+    hazcam_left_front_image_bridge = Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['hazcam_left_front/image_raw', 'hazcam_left_front/image_raw'],
+            output='screen')
+
+    hazcam_left_rear_image_bridge = Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['hazcam_left_rear/image_raw', 'hazcam_left_rear/image_raw'],
+            output='screen')
+
+    hazcam_right_front_image_bridge = Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['hazcam_right_front/image_raw', 'hazcam_right_front/image_raw'],
+            output='screen')
+
+    hazcam_right_rear_image_bridge = Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['hazcam_right_rear/image_raw', 'hazcam_right_rear/image_raw'],
             output='screen')
 
     spawn = Node(
@@ -103,7 +140,7 @@ def generate_launch_description():
         arguments=[
             '-name', 'lunar_pole_exploration_rover',
             '-topic', robot_description,
-            '-z', '0.0'
+            '-z', '0.0',
         ],
         output='screen'
 
@@ -156,7 +193,14 @@ def generate_launch_description():
         run_node,
         odom_node,
         ros_gz_bridge,
-        image_bridge,
+        navcam_left_image_bridge,
+        navcam_right_image_bridge,
+        aftcam_left_image_bridge,
+        aftcam_right_image_bridge,
+        hazcam_left_front_image_bridge,
+        hazcam_left_rear_image_bridge,
+        hazcam_right_front_image_bridge,
+        hazcam_right_rear_image_bridge,
 
         RegisterEventHandler(
             OnProcessExit(
