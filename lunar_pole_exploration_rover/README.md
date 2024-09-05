@@ -235,7 +235,7 @@ This model represents the 1sqkm area centered at (TODO RBinsonb add SCS coordina
 
 The model was textured and additional detailed elevation noise at a higher definition than the DEM data was added.
 
-TODO RBinsonb add image of model
+![Mons Mouton Terrain 3D Model](assets/ressources/images/mons_mouton_terrain_model.png)
 
 ### Power System Plugins
 #### SolarPanelPlugin
