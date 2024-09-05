@@ -74,7 +74,47 @@ ros2 launch lunar_pole_exploration_rover lunar_pole_exploration_rover.launch.py
 ```
 
 ### Controlling the rover
-TODO
+
+#### Setup
+
+Open a ne terminal and attach the current running container:
+```bash
+docker exec -it lunar_pole_exploration_rover bash
+```
+
+Source the necessary packaegs. 
+```bash
+source ~/spaceros/install/setup.bash
+```
+
+```bash
+source ~/demos_ws/install/setup.bash
+```
+
+#### Available commands
+
+```bash
+ros2 service call /move_forward std_srvs/srv/Empty
+```
+
+Stop the rover
+
+```bash
+ros2 service call /move_stop std_srvs/srv/Empty
+```
+
+Turn left
+
+```bash
+ros2 service call /turn_left std_srvs/srv/Empty
+```
+
+Turn right
+
+```bash
+ros2 service call /turn_right std_srvs/srv/Empty
+```
+
 
 
 ### Solar panel and power
