@@ -297,7 +297,7 @@ The plugin needs to be attached to a model. Example below:
     <nominal_power>100.0</nominal_power>
 </plugin>
 ```
-#### RtgPlugin
+
 #### RechargeableBatteryPlugin
 TODO @stevedanolodomor
 #### SensorPowerSystemPlugin
