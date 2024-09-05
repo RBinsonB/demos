@@ -33,7 +33,7 @@ git checkout feat/lunar_pole_exploration_rover
 Build the image:
 ```bash
 cd ~spaceros_ws
-docker build -f demos/lunar_pole_exploration_rover/docker/Dockerfile -t lunar_rover_image
+docker build -f demos/lunar_pole_exploration_rover/docker/Dockerfile -t lunar_rover_image .
 ```
 
 ### Running the docker
