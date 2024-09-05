@@ -148,6 +148,17 @@ Our contribution is as follows:
   * A modified version of the linear battery plugin that is able to take as charge input the power outputs of the two previous plugins.
   * A sensor power load system plugin to simulate the power drawn by sensors
 
+### Why It Matters
+Our motivation and rational for this contribution is firstly based on the renewed global interest for the moon. The polar regions in particular are of high interest due to the high chance of water ice being present in permanently shaded craters. Said water could be used to establish a long lasting human presence on the moon (https://www.weforum.org/agenda/2023/08/space-water-ice-moon-south-pole/).
+
+Unique challenges have to be addressed in this environment and would be interesting to simulate in Space-ROS. In particular the power generation and management:
+* Solar power being constantly available outside of shaded area
+* Solar power being unavailable while testing the presence of water ice in a shaded area
+* Solar panel placement to adapt to the sun low position on the horizon
+
+In addition, power generation and management strategies are a cornerstone of any space mission, and in particular space robotic missons. Many space missions have been saved or got extended beyond their initially planned lifetimes through the careful management of power loads. Deactivating science equipment, sensors and even actuators to reduce consumption. For example, the Opportunity and Spirit rovers extended their mission life well beyond the planned 90 days by deactivating non-essential equipment and reducing communication during dust storms (https://web.archive.org/web/20140902071407/http://www.nasa.gov/mission_pages/mer/mer-20070824.html). Being able to simulate those behaviors and strategies seems of great added value to Space-ROS.
+
+
 ### Lunar Pole Exploration Rover
 The rover gazebo model is designed to be as close as posible to the real NASA VIPER rover.
 
