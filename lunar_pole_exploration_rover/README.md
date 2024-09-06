@@ -21,7 +21,7 @@ This package and associated plugins and models were developped by [Robin Baran](
     3. [Controlling the rover](#controlling_rover)
         1. [Setup](#setup_rover)
         2. [Available commands](#available_commands)
-    4.[Solar panel and power](#solar_panel_and_power)
+    4. [Solar panel and power](#solar_panel_and_power)
 2. [Contribution details](#contrib)
     1. [Why It Matters](#why_it_matters)
     2. [Lunar Pole Exploration Rover](#lunar_pole_exploration_rover)
