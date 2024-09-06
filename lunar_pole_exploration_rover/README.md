@@ -14,8 +14,16 @@ This package and associated plugins and models were developped by [Robin Baran](
     Team lead Freelancer name: @RBinsonB
     Submission title: Lunar Pole Exploration Rover & Plugins
 
-## Running the demo
-### Building the docker
+# Table of contents
+1. [Running the demo](#running_demo)
+    1. [Building the docker](#building_docker)
+    1. [Running the docker](#running_docker)
+2. [Some paragraph](#paragraph1)
+    1. [Sub paragraph](#subparagraph1)
+3. [Another paragraph](#paragraph2)
+
+## Running the demo <a name="running_demo"></a>
+### Building the docker <a name="building_docker"></a>
 To build the docker image, go to your ROS2 workspace. Make a spaceros workspace if you don't already have one:
 ```bash
 mkdir -p ~spaceros_ws/src
@@ -38,7 +46,7 @@ cd ~spaceros_ws
 docker build -f demos/lunar_pole_exploration_rover/docker/Dockerfile -t lunar_rover_image .
 ```
 
-### Running the docker
+### Running the docker <a name="running_docker"></a>
 Run the following command before running the container:
 ```bash
 xhost +local:docker
@@ -75,9 +83,9 @@ Once the container is running, launch the demo by typing the following command:
 ros2 launch lunar_pole_exploration_rover lunar_pole_exploration_rover.launch.py
 ```
 
-### Controlling the rover
+### Controlling the rover <a name="controlling_rover"></a>
 
-#### Setup
+#### Setup <a name="setup_rover"></a>
 
 Open a ne terminal and attach the current running container:
 ```bash
@@ -93,7 +101,7 @@ source ~/spaceros/install/setup.bash
 source ~/demos_ws/install/setup.bash
 ```
 
-#### Available commands
+#### Available commands <a name="available_commands"></a>
 
 ```bash
 ros2 service call /move_forward std_srvs/srv/Empty
