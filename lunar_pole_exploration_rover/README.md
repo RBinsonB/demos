@@ -17,6 +17,7 @@ This package and associated plugins and models were developped by [Robin Baran](
 # Table of contents
 1. [Running the demo](#running_demo)
     1. [Building the docker](#building_docker)
+<<<<<<< HEAD
     2. [Running the docker](#running_docker)
     3. [Controlling the rover](#controlling_rover)
       1. [Setup](#setup_rover)
@@ -45,6 +46,12 @@ This package and associated plugins and models were developped by [Robin Baran](
         1. [How to setup the plugin](#bat_plugin_setup)
       4. [SensorPowerSystemPlugin](#sensor_system_plugin)
         1. [How to setup the plugin](#sensor_system_plugin_setup)
+=======
+    1. [Running the docker](#running_docker)
+2. [Some paragraph](#paragraph1)
+    1. [Sub paragraph](#subparagraph1)
+3. [Another paragraph](#paragraph2)
+>>>>>>> 512dcfbb3d3a01e968a74149e34cddc5975c6b47
 
 ## Running the demo <a name="running_demo"></a>
 ### Building the docker <a name="building_docker"></a>
