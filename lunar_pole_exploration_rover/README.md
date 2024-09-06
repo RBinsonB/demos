@@ -1,5 +1,7 @@
 # lunar_pole_exploration_rover
 
+![Demo Banner](assets/ressources/images/demo_banner.png)
+
 This package (and associated assets in the simulation repository) provides a Gazebo simulation of a lunar south pole exploration mission inspired by the real NASA VIPER mission.
 
 It includes a realistic environment, the Mons Mouton, where the VIPER rover was planned to land, and a fully controllable rover model. 
@@ -134,7 +136,21 @@ ros2 service call /camera_center std_srvs/srv/Empty
 ```
 
 ### Solar panel and power
-TODO
+The power output of each panel can be printed by typing either of the following. When moving the rover, the power can be seen to vary as the panel position relative to the sun is changing.
+```bash
+ros2 topic echo /model/lunar_pole_exploration_rover/left_solar_panel/solar_panel_output
+```
+```bash
+ros2 topic echo /model/lunar_pole_exploration_rover/right_solar_panel/solar_panel_output
+```
+```bash
+ros2 topic echo /model/lunar_pole_exploration_rover/rear_solar_panel/solar_panel_output
+```
+
+The power being produced is sent to a rechargeable battery. The state of the battery can be seen using:
+```bash
+ros2 topic echo /model/lunar_pole_exploration_rover/battery/rechargeable_battery/state
+```
 
 
 ## Contribution details
@@ -162,13 +178,13 @@ In addition, power generation and management strategies are a cornerstone of any
 ### Lunar Pole Exploration Rover
 The rover gazebo model is designed to be as close as posible to the real NASA VIPER rover.
 
-It has four steerable wheels that allow a wide range of motion, including going sideways (it would even be holonomic if it wasn't for the limits on the wheel steer angles). TODO INSERT REF (@RBinsonB)
+It has four steerable wheels that allow a wide range of motion, including going sideways [[source]](https://science.nasa.gov/mission/viper/in-depth/) (it would even be holonomic if it wasn't for the limits on the wheel steer angles).
 
 The rover is equipped with a main navigation camera (actually a pair) mounted on a mast. The camera is able to pan and tilt.
 
-TODO RBinson insert image
+![Lunar Pole Exploration Rover Model Screenshot](assets/ressources/images/lunar_pole_exploration_rover_model.png)
 
-The rover is powered by a battery. The battery is charged by three solar panels: one on the left, one on the right and on at the back of the rover. The panels are tilted sideways to face the sun which is low on the horizon when close to the moon south pole. Total power of the solar panel is 450W (TODO RBinsonB insert ref) and therefor each panel was estimated to produce 150W at full capacity (sun hitting horizontally). The solar panels are simulated using a specifically developed plugin, detailed later in the document.
+The rover is powered by a battery. The battery is charged by three solar panels: one on the left, one on the right and on at the back of the rover. The panels are tilted sideways to face the sun which is low on the horizon when close to the moon south pole. Total power of the solar panel is 450W [[source]](https://science.nasa.gov/mission/viper/in-depth/) and therefor each panel was estimated to produce 150W at full capacity (sun hitting horizontally). The solar panels are simulated using a specifically developed plugin, detailed later in the document.
 
 #### Sensor suit
 It features a similar sensor suit of the real VIPER rover. Detailed characteristics were obtained from [359199649_VIPER_Visible_Imaging_System](https://www.researchgate.net/publication/359199649_VIPER_Visible_Imaging_System) and [20210015009 - Colaprete-VIPER PIP final.pdf](https://ntrs.nasa.gov/api/citations/20210015009/downloads/20210015009%20-%20Colaprete-VIPER%20PIP%20final.pdf) and [viper-moon-rover-head-neck-mast-installed](https://www.space.com/viper-moon-rover-head-neck-mast-installed).
@@ -180,31 +196,71 @@ It features a similar sensor suit of the real VIPER rover. Detailed characterist
 - An Odometry plugin to simulate wheel encoders.
 
 #### Power system
-#### Control node
+The rover is powered by a simulated rechargeable battery. The battery is recharged by the solar panels and drained by the rover motion and sensors. A set of custom made Gazebo plugins is used to simulate this behavior. The plugins simulate the power generation depending on the sun position relative to the panels, the charge of the battery and the power of the sensors. Details on the plugins are given in the dedicated section later in the document.
+
+#### Control nodes
+The `move_wheel` node provides the ROS2 standard `cmd_vel` control topic to drive the rover.
 ##### Motion types
+The control nodes considers four different types of motion depending on the values of the field of the `cmd_vel` control topic.
+
+* All fields to zero -- No motion
+  All wheel steer angles are set to zero and all wheel velocities are set to zero. The rover will actively brake to stop.
+* Only angular velocity around z-axis, no linear velocity -- Rotate on place
+  The wheel steer angles are set individually so that they are all set perpendicularly to the robot center. The wheels will rotate accordingly for the rover to rotate on place at the request angular velocity
+* Only linear velocity, no angular velocity -- Sideway motion
+  The wheel steer angles are all set to the same angle, the angle of the linear velocity command vector. The wheels all rotates at the same velocities for the rover to move with the speed of the norm of the linear velocity command vector
+* Linear velociies and angular velocity around z-axis -- Combined motion
+  The rover will act as an Ackermann-driven robot. The sideway motion is first set as explained before by only considering the linear elements of the velocity command vector. The steer angle and rotation velocity of each wheel is then adjusted to add the angular velocity around z-axis by considering a steering radius for the robot.
+
+![Rover Possible Motions Schematics](assets/ressources/images/motions.png)
 
 #### Rover model API
 ##### Subscribed Topics
-@RBinsonB TODO
+* **/cmd_vel** (`geometry_msgs/msg/Twist`) -- Velocity command to the rover
+* **/model/lunar_pole_exploration_rover/sensor/aft_cam_left/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+* **/model/lunar_pole_exploration_rover/sensor/aft_cam_right/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+* **/model/lunar_pole_exploration_rover/sensor/nav_cam_left/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+* **/model/lunar_pole_exploration_rover/sensor/nav_cam_right/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+* **/model/lunar_pole_exploration_rover/sensor/haz_cam_left_front/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+* **/model/lunar_pole_exploration_rover/sensor/haz_cam_right_front/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+* **/model/lunar_pole_exploration_rover/sensor/haz_cam_left_rear/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+* **/model/lunar_pole_exploration_rover/sensor/haz_cam_right_rear/activate** (`std_msgs/msg/Boolean`) -- Use to activate/deactivate the sensor and its associated power load
+
 ##### Published Topics
-* **/model/lunar_pole_exploration_rover/left_solar_panel/solar_panel_output** (`ignition_msgs::msg::Float32`) -- Publishes the current output of the left solar panel in watt
-* **/model/lunar_pole_exploration_rover/right_solar_panel/solar_panel_output** (`ignition_msgs::msg::Float32`) -- Publishes the current output of the right solar panel in watt
-* **/model/lunar_pole_exploration_rover/rear_solar_panel/solar_panel_output** (`ignition_msgs::msg::Float32`) -- Publishes the current output of the rear solar panel in watt
-* **/model/lunar_pole_exploration_rover/odometry** (`ignition_msgs::msg::Odometry`) -- Robot odometry
-* **/model/lunar_pole_exploration_rover/odometry_with_covariance**(`ignition_msgs::msg::OdometryWithCovariance`) -- Robot odometry
-* **/model/lunar_pole_exploration_rover/battery/rechargeable_battery/state** (`ìgnition_msgs::msg::BaterrySate`) -- Publishes the current state of the battery `rechargeable_battery´
-* **/model/lunar_pole_exploration_rover/pose**(`ignition_msgs::msg::Pose`) -- Robot estimated pose from odometry
-* **aft_cam_left/camera_info** (`ignition_msgs::msg::CameraInfo`) -- AftCam left camera info
-* **aft_cam_right/camera_info** (`ignition_msgs::msg::CameraInfo`) -- AftCam right camera info
-* **nav_cam_left/camera_info** (`ignition_msgs::msg::CameraInfo`) -- NavCam left camera info
-* **nav_cam_right/camera_info** (`ignition_msgs::msg::CameraInfo`) -- NavCam right camera info
-* **aft_cam_left/image_raw** (`ignition_msgs::msg::Image`) -- AftCam left camera image
-* **aft_cam_right/image_raw** (`ignition_msgs::msg::Image`) -- AftCam right camera image
-* **nav_cam_left/image_raw** (`ignition_msgs::msg::Image`) -- NavCam left camera image
-* **nav_cam_right/image_raw** (`ignition_msgs::msg::Image`) -- NavCam right camera image
+* **/model/lunar_pole_exploration_rover/left_solar_panel/solar_panel_output** (`std_msgs/msg/Float32`) -- Publishes the current output of the left solar panel in watt
+* **/model/lunar_pole_exploration_rover/right_solar_panel/solar_panel_output** (`std_msgs/msg/Float32`) -- Publishes the current output of the right solar panel in watt
+* **/model/lunar_pole_exploration_rover/rear_solar_panel/solar_panel_output** (`std_msgs/msg/Float32`) -- Publishes the current output of the rear solar panel in watt
+* **/model/lunar_pole_exploration_rover/odometry** (`nav_msgs/msg/Odometry`) -- Robot odometry
+* **/model/lunar_pole_exploration_rover/odometry_with_covariance**(`nav_msgs/msg/OdometryWithCovariance`) -- Robot odometry
+* **/model/lunar_pole_exploration_rover/battery/rechargeable_battery/state** (`sensor_msgs/msg/BatterySate`) -- Publishes the current state of the battery `rechargeable_battery´
+* **/model/lunar_pole_exploration_rover/pose**(`geometry_msgs/msg/Pose`) -- Robot estimated pose from odometry
+* **aft_cam_left/camera_info** (`sensor_msgs/msg/CameraInfo`) -- AftCam left camera info
+* **aft_cam_right/camera_info** (`sensor_msgs/msg/CameraInfo`) -- AftCam right camera info
+* **nav_cam_left/camera_info** (`sensor_msgs/msg/CameraInfo`) -- NavCam left camera info
+* **nav_cam_right/camera_info** (`sensor_msgs/msg/CameraInfo`) -- NavCam right camera info
+* **haz_cam_left_front/camera_info** (`sensor_msgs/msg/CameraInfo`) -- HazCam left front camera info
+* **haz_cam_left_rear/camera_info** (`sensor_msgs/msg/CameraInfo`) -- HazCam left rear camera info
+* **haz_cam_right_front/camera_info** (`sensor_msgs/msg/CameraInfo`) -- HazCam right front camera info
+* **haz_cam_right_rear/camera_info** (`sensor_msgs/msg/CameraInfo`) -- HazCam right rear camera info
+* **aft_cam_left/image_raw** (`sensor_msgs/msg/Image`) -- AftCam left camera image
+* **aft_cam_right/image_raw** (`sensor_msgs/msg/Image`) -- AftCam right camera image
+* **nav_cam_left/image_raw** (`sensor_msgs/msg/Image`) -- NavCam left camera image
+* **nav_cam_right/image_raw** (`sensor_msgs/msg/Image`) -- NavCam right camera image
+* **haz_cam_left_front/image_raw** (`sensor_msgs/msg/Image`) -- HazCam left front camera image
+* **haz_cam_left_rear/image_raw** (`sensor_msgs/msg/Image`) -- HazCam left rear camera image
+* **haz_cam_right_front/image_raw** (`sensor_msgs/msg/Image`) -- HazCam right front camera image
+* **haz_cam_right_rear/image_raw** (`sensor_msgs/msg/Image`) -- HazCam right rear camera image
 
 ##### Services
-@RBinsonB TODO
+* **camera_center** (`std_srvs/srv/Empty`) -- Demonstration service that center the pan of the camera and face down 45°
+* **camera_rotate** (`std_srvs/srv/Empty`) -- Demonstration service that rotate the camera around
+* **move_forward** (`std_srvs/srv/Empty`) -- Demonstration service that drive the rover forward
+* **turn_left** (`std_srvs/srv/Empty`) -- Demonstration service that drive the rover forward and turn left
+* **turn_right** (`std_srvs/srv/Empty`) -- Demonstration service that drive the rover forward and turn right
+* **move_sideway_left** (`std_srvs/srv/Empty`) -- Demonstration service that drive the rover sideway to the left
+* **move_sideway_right** (`std_srvs/srv/Empty`) -- Demonstration service that drive the rover sideway to the right
+* **move_sideway_and_turn_left** (`std_srvs/srv/Empty`) -- Demonstration service that drive the rover sideway and rotate (combined motion)
+* **move_stop** (`std_srvs/srv/Empty`) -- Demonstration service that stops the rover
 
 ##### Controllable Joint Interfaces
 * mast_head_pivot_joint (`revolute`) -- NavCam pan joint
@@ -230,7 +286,7 @@ The differentiating characteristics of the Gazebo world are as follows:
 * Sun light entity is placed low on the horizon and direction is set to mimic real sunlight conditions at Mons Mouton.
 
 #### Mons Mouton Terrain Model
-This model represents the 1sqkm area centered at (TODO RBinsonb add SCS coordinate) and was generated by using DEM data (site20) from the NASA LRO mission: https://pgda.gsfc.nasa.gov/products/78 (Barker, M.K., et al. (2021), Improved LOLA Elevation Maps for South Pole Landing Sites: Error Estimates and Their Impact on Illumination Conditions, Planetary & Space Science, Volume 203, 1 September 2021, 105119,  doi:10.1016/j.pss.2020.105119.).
+This model represents the 1sqkm area at Long31.00, Lat84.6 and was generated by using DEM data (site20) from the NASA LRO mission: https://pgda.gsfc.nasa.gov/products/78 (Barker, M.K., et al. (2021), Improved LOLA Elevation Maps for South Pole Landing Sites: Error Estimates and Their Impact on Illumination Conditions, Planetary & Space Science, Volume 203, 1 September 2021, 105119,  doi:10.1016/j.pss.2020.105119.).
 
 ![Mons Mouton World Screenshot](assets/ressources/images/mons_mouton_lro.png)
 
@@ -247,14 +303,14 @@ The solar panel plugin allows to simulate solar panel power output depending on 
   * **nominal_power** (`float`) -- The maximum power supplied by the solar panel when the sun is hitting perdendicular
 
 * Publications
-  * **/model/<model_name>/<link_name>/solar_panel_output** (`std_msgs::msg::Float`) -- Publishes the current solar panel output in watt.
+  * **/model/`<model_name>`/`<link_name>`/solar_panel_output** (`std_msgs/msg/Float`) -- Publishes the current solar panel output in watt.
  
 ##### How to setup the plugin
 The plugin needs to be attached to a model. The link specified by **<link_name>** is the solar panel.
 
 
 ```XML
-<plugin filename="libSolarPanelPlugin.so" name="simulation::SolarPanelPlugin">
+<plugin filename="libSolarPanelPlugin.so" name="simulation/SolarPanelPlugin">
     <link_name>rear_solar_panel</link_name>
     <nominal_power>150.0</nominal_power>
  </plugin>
@@ -290,7 +346,7 @@ The plugin needs to be attached to a model. The link specified by **<link_name>*
   </light>
   ```
 - **LOS (Line-Of-Sight)**: If the sun is occulted, no power is supplied by the solar panel plugin. To know if the panel is occulted, the plugin checks the line of sight between the `sun` (by using the `<pose>` element) and the link visual children. The panel solar link needs to have at least one visual element for the plugin to work.
-- **Power computation**: The plugin computes the power generated by the panel by checking the angle between the Z-axis of the solar panel link and the `direction` vector of the sun. TODO @RBinsonB add image and ref
+- **Power computation**: The plugin computes the power generated by the panel by checking the angle between the Z-axis of the solar panel link and the `direction` vector of the sun according to the [cosine effect](https://www.e-education.psu.edu/eme812/node/896). The value given by nominal_power is multiplied by the result of the cosine of the angle between the sun direction vector and the solar panel z-axis.
 
 #### RadioisotopeThermalGeneratorPlugin
 The radioisotope thermal generator plugin allows to simulate an RTG power output. It provides a constant power supply.
@@ -300,22 +356,112 @@ The radioisotope thermal generator plugin allows to simulate an RTG power output
   * **nominal_power** (`float`) -- The constant power in watt generated by the RTG.
 
 * Publications
-  * **/model/<model_name>/<link_name>/radioisotope_thermal_generator_output** (`std_msgs::msg::Float`) -- Publishes the current solar panel output in watt.
+  * **/model/`<model_name>`/`<link_name>`/radioisotope_thermal_generator_output** (`std_msgs/msg/Float`) -- Publishes the current solar panel output in watt.
 
 ##### How to setup the plugin
 The plugin needs to be attached to a model. Example below:
 
 ```XML
-<plugin filename="libRadioisotopeThermalGeneratorPlugin.so" name="simulation::RadioisotopeThermalGeneratorPlugin">
+<plugin filename="libRadioisotopeThermalGeneratorPlugin.so" name="simulation/RadioisotopeThermalGeneratorPlugin">
     <link_name>chassis</link_name>
     <nominal_power>100.0</nominal_power>
 </plugin>
 ```
 
 #### RechargeableBatteryPlugin
-TODO @stevedanolodomor
+The rechargeable battery plugin is a modified version of the stock LinearBatteryPlugin to allow recharge at a variable rate. It can be charged by any plugin providing a power output in watts on a Gazebo topic. In addition, by default, if no start draining topic is defined, the battery starts to drain as soon as the robot starts to move. 
+
+* Required elements
+  * **battery_name** (`str`) -- Unique name for the battery (required)
+  * **voltage** (`double`) -- Initial voltage of the battery (required)
+  * **open_circuit_voltage** (`double`) -- 
+  * **open_circuit_voltage_constant_coef** (`double`) -- Voltage at full charge
+  * **open_circuit_voltage_linear_coef** (`double`) -- Amount of voltage decrease when no charge
+  * **initial_charge** (`double`) -- Initial charge of the battery in Ah
+  * **capacity** (`double`) -- Total charge that the battery in Ah
+  * **resistance** (`double`) -- Internal resistance in Ohm
+  * **smooth_current_tau** (`double`) -- Coefficient for smoothing current [0, 1]
+  * **power_source** (`array[str]`) -- List of topic of power sources.
+  * **start_draining** (`boolean`) -- Whether to start draining the battery
+  * **power_draining_topic** (`str`) -- This is the topic to start draining the battery
+  * **stop_power_draining_topic** (`str`) -- This is to stop draining the battery
+  * **power_load** (`double`) -- Idle power load
+ 
+ * Publications
+   * **/model/`<model_name>`/battery/`<battery_name>`/state** (`sensor_msgs/msg/BatterySate`) -- Publishes the current state of the battery
+
+##### How to setup the plugin
+The plugin needs to be attached to a model. Example below:
+
+```XML
+<plugin filename="libRechargeableBatteryPlugin.so" name="simulation/RechargeableBatteryPlugin">
+    <battery_name>rechargeable_battery</battery_name>
+    <voltage>30.0</voltage>
+    <open_circuit_voltage>30.0</open_circuit_voltage>
+    <open_circuit_voltage_constant_coef>30.0</open_circuit_voltage_constant_coef>
+    <open_circuit_voltage_linear_coef>-3.0</open_circuit_voltage_linear_coef>
+    <initial_charge>9.0</initial_charge>
+    <capacity>10.0</capacity>
+    <resistance>0.1</resistance>
+    <smooth_current_tau>1.0</smooth_current_tau>
+
+    <!-- power source -->
+    <power_source>left_solar_panel/solar_panel_output</power_source>
+    <power_source>right_solar_panel/solar_panel_output</power_source>
+    <power_source>rtg_body/radioisotope_thermal_generator_output</power_source>
+
+    <power_load>11.0</power_load>
+    <power_draining_topic>/battery/discharge</power_draining_topic>
+</plugin>
+```
+
+* The power source topic needs to be on the format `<link_name>/<plugin_power_output_name>`. As of now, the following plugins can provide power to charge the battery:
+  * **SolarPanelPlugin**: with topic `<link_name>/solar_panel_output`
+  * **RadioisotopeThermalGeneratorPlugin**: with topic `<link_name>/radioisotope_thermal_generator_output`
+
 #### SensorPowerSystemPlugin
-TODO @stevedanolodomor
+The sensor power system plugin pairs with the RechargeableBatteryPlugin allowing one to define for each sensor the power load it consumes from any battery in the model. Sensors can be deactivated to save power (as it is often the case on real space missions). When the battery is too low, the sensors managed by the plugin will also be deactivated. In addition, topics are exposed to disable the power load of each sensor consumption on demand. The topic uses the following format. 
 
+ * **/model/`<model_name>`/sensor/`<sensor_name>`/activate** (`std_msgs/msg/Boolean`) -- Topic available to activate/deactivate the power consumption of sensor.
 
+The model can have multiple batteries and each sensor consumes from any of those batteries. 
 
+#### How to setup the plugin
+The plugin needs to be attached to a model. Example below:
+
+```XML
+ <plugin filename="libSensorPowerSystemPlugin.so" name="simulation/SensorPowerSystemPlugin">
+ </plugin>
+```
+
+In addition, you need to include in each of the sensors, the power load and the battery they consume from. Example below:
+
+```XML
+ <gazebo reference="nav_camera_link_left">
+    <sensor type="camera" name="NavCam_left">
+        <visualize>1</visualize>
+        <update_rate>10.0</update_rate>
+        <power_load>11.0</power_load>
+        <battery_name>rechargeable_battery</battery_name>
+        <camera>
+            <pose>1.0 0 0 0 0 0</pose>
+            <horizontal_fov>1.22173</horizontal_fov>
+            <image>
+                <width>2048</width>
+                <height>2048</height>
+                <format>L16</format>
+            </image>
+            <clip>
+                <near>0.01</near>
+                <far>100</far>
+            </clip>
+            <noise>
+                <type>gaussian</type>
+                <stddev>0.007</stddev>
+            </noise>
+        </camera>
+        <always_on>1</always_on>
+        <topic>navcam_left/image_raw</topic>
+    </sensor>
+</gazebo>
+```
